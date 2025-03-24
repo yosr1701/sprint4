@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Vetement {
@@ -17,7 +18,8 @@ public class Vetement {
 	private Double prix;
 	private Date dateCreation;
 	
-	
+	@ManyToOne
+	private Genre genre ;
 	
 	public Vetement() {
 		super();
@@ -61,6 +63,14 @@ public class Vetement {
 	public String toString() {
 		return "Vetement [idVet=" + idVet + ", nomVet=" + nomVet + ", prix=" + prix + ", dateCreation=" + dateCreation
 				+ "]";
+	}
+
+	public Genre getGenre() {
+		return genre;
+	}
+
+	public void setGenre(Genre genre) {
+		this.genre = genre;
 	} 
 	
 	

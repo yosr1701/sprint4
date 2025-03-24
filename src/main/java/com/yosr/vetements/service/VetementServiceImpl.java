@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.yosr.vetements.entities.Genre;
 import com.yosr.vetements.entities.Vetement;
 import com.yosr.vetements.repos.VetementRepository;
 
@@ -52,6 +53,46 @@ public class VetementServiceImpl implements VetementService{
 	public Page<Vetement> getAllVetementParPage(int page, int size) {
 		
 		return vetementRepository.findAll(PageRequest.of(page,size));
+	}
+
+	@Override
+	public List<Vetement> findByNomVet(String nom) {
+	
+		return vetementRepository.findByNomVet(nom);
+	}
+
+	@Override
+	public List<Vetement> findByNomVetContains(String nom) {
+		
+		return vetementRepository.findByNomVetContains( nom);
+	}
+
+	@Override
+	public List<Vetement> findByNomPrix(String nom, Double prix) {
+		return vetementRepository.findByNomPrix(nom, prix);
+	}
+
+	@Override
+	public List<Vetement> findByGenre(Genre genre) {
+		return vetementRepository.findByGenre(genre);
+	}
+
+	@Override
+	public List<Vetement> findByGenreIdGen(Long id) {
+		
+		return vetementRepository.findByGenreIdGen(id); 
+	}
+
+	@Override
+	public List<Vetement> findByOrderByNomVetAsc() {
+		
+		return vetementRepository.findByOrderByNomVetAsc();
+	}
+
+	@Override
+	public List<Vetement> trierVetementsNomVetPrix() {
+		
+		return vetementRepository.trierVetementsNomVetPrix();
 	}
 
 }

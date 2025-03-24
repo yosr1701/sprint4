@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
+import com.yosr.vetements.entities.Genre;
 import com.yosr.vetements.entities.Vetement;
 import com.yosr.vetements.repos.VetementRepository;
 import com.yosr.vetements.service.VetementService;
@@ -69,4 +70,69 @@ class VetementsApplicationTests {
 	 System.out.println(p);
 	 } */
 	 }
+	 
+	 
+	 @Test
+	    public void testFindVetementByNom() {
+	        List<Vetement> v = VetementRepository.findByNomVet("veste"); 
+	        for (Vetement vet : v) {
+	            System.out.println(vet); 
+	        }
+	    }
+
+	    @Test
+	    public void testFindByNomVetContains() {
+	        List<Vetement> v = VetementRepository.findByNomVetContains("t");
+	        for (Vetement vet : v) {
+	            System.out.println(vet);
+	        }
+	    }
+	    
+	    @Test
+	    public void testFindByNomPrix() {
+	        List<Vetement> vetements = VetementRepository.findByNomPrix("veste", 150.0);
+	        for (Vetement v : vetements) {
+	            System.out.println(v);
+	        }
+	    }
+	    
+	    
+	    @Test
+	    public void testFindByCategorie() {
+	        // Créer une catégorie avec un ID valide
+	        Genre gen = new Genre();
+	        gen.setIdGen(1L);  // Assure-toi que l'ID de la catégorie est valide
+	        // Trouver les produits par catégorie
+	        List<Vetement> vetements = VetementRepository.findByGenre(gen);
+	        // Afficher les produits trouvés
+	        for (Vetement v : vetements) {
+	            System.out.println(v);
+	        }
+	    }
+
+	    
+	    @Test
+	    public void testFindByGenreIdGen() {
+	    	List<Vetement> vetements = VetementRepository.findByGenreIdGen(1L);
+	    	for (Vetement v : vetements) {
+	            System.out.println(v);
+	        }
+	    }
+
+
+	    @Test
+	    public void findByOrderByNomVetAsc() {
+	    	List<Vetement> vetements = VetementRepository.findByOrderByNomVetAsc();
+	    	for (Vetement v : vetements) {
+	            System.out.println(v);
+	        }
+	    }
+	    
+	    @Test
+	    public void trierVetementsNomVetPrix() {
+	    	List<Vetement> vetements = VetementRepository.trierVetementsNomVetPrix();
+	    	for (Vetement v : vetements) {
+	            System.out.println(v);
+	        }
+	    }
 }

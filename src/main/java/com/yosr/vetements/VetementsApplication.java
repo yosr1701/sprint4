@@ -1,4 +1,4 @@
-package com.yosr.vetements;
+ package com.yosr.vetements;
 
 import java.util.Date;
 
@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 
 import com.yosr.vetements.entities.Vetement;
 import com.yosr.vetements.service.VetementService;
@@ -16,6 +17,8 @@ public class VetementsApplication implements CommandLineRunner {
 	@Autowired
 	VetementService vetementService;
 	
+	@Autowired
+	private RepositoryRestConfiguration repositoryRestConfiguration;
 	public static void main(String[] args) {
 		SpringApplication.run(VetementsApplication.class, args);
 
@@ -31,6 +34,7 @@ public class VetementsApplication implements CommandLineRunner {
 		//vetementService.saveProduit(new Vetement("chemise", 45.0, new Date()));
 		//vetementService.saveProduit(new Vetement("t-shirt", 25.0, new Date()));
 		//vetementService.saveProduit(new Vetement("jeans", 60.0, new Date()));
+		repositoryRestConfiguration.exposeIdsFor(Vetement.class);
 		
 	}
 
