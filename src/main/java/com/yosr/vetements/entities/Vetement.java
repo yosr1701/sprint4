@@ -2,20 +2,39 @@ package com.yosr.vetements.entities;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Vetement {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long idVet;
+	private Long idVet;
+	
+	@NotNull
+	@Size(min = 4,max =100)
 	private String nomVet;
+	
+	@Min(value= 5)
+	@Max(value= 100000)
 	private Double prix;
+	
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@PastOrPresent
 	private Date dateCreation;
 	
 	@ManyToOne
@@ -34,10 +53,10 @@ public class Vetement {
 
 
 
-	public long getIdVet() {
+	public Long getIdVet() {
 		return idVet;
 	}
-	public void setIdVet(long idVet) {
+	public void setIdVet(Long idVet) {
 		this.idVet = idVet;
 	}
 	public String getNomVet() {

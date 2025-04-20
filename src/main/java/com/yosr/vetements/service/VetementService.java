@@ -24,6 +24,8 @@ public interface VetementService {
 	List<Vetement>findByOrderByNomVetAsc();
 	List<Vetement>trierVetementsNomVetPrix();
 	
+	List<Genre>getAllGenres();
+	
 	Page<Vetement> getAllVetementParPage(int page, int size);
 
 }

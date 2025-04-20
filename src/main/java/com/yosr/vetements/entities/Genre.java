@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+//pour generer les getters et les setters de lambok
+
 @Entity
 public class Genre {
 	
@@ -31,37 +33,6 @@ public class Genre {
 	@OneToMany(mappedBy = "genre") 
 	@JsonIgnore
 	private List<Vetement>  vetements; 
-	
-	public long getIdGen() {
-		return idGen;
-	}
-	public void setIdGen(long idGen) {
-		this.idGen = idGen;
-	}
-	public String getNomGen() {
-		return nomGen;
-	}
-	public void setNomGen(String nomGen) {
-		this.nomGen = nomGen;
-	}
-	public String getDescGen() {
-		return descGen;
-	}
-	public void setDescGen(String descGen) {
-		this.descGen = descGen;
-	}
-	@Override
-	public String toString() {
-		return "Genre [idGen=" + idGen + ", nomGen=" + nomGen + ", descGen=" + descGen + "]";
-	}
-
-	public List<Vetement> getVetements() {
-		return vetements;
-	}
-
-	public void setVetements(List<Vetement> vetements) {
-		this.vetements = vetements;
-	}
 	
 	
 }

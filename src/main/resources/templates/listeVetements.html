@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec=https://www.thymeleaf.org/thymeleaf-extras-springsecurity6>
 <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 
 <head>
@@ -9,7 +10,8 @@
 </head>
 
 <body>
-	<div th:replace="template"></div>
+	<div th:replace="~{template}"></div>
+
 	<div class="container mt-5">
 		<div class="card">
 			<div class="card-header">
@@ -23,15 +25,26 @@
 						<th>Nom Vetement</th>
 						<th>Prix</th>
 						<th>Date</th>
-						<th>Action</th>
+						<th>Genre</th>
+						<th sec:authorize="hasAuthority('ADMIN')">Editer</th>
+						<th sec:authorize="hasAuthority('ADMIN')">Action</th>
 					</tr>
+					
 					<tr th:each="v:${vetements.content}">
 						<td th:text="${v.idVet}"></td>
 						<td th:text="${v.nomVet}"></td>
 						<td th:text="${v.prix}"></td>
-						<td><a class="btn btn-success"th:href="@{/modifierVetement(id=${v.idVet})}">Editer</a></td>
-						<td><a class="btn btn-danger" onclick="return confirm('Etes-vous sûr ?')" 
-							 th:href="@{/deleteVetement(id=${v.idVet}, page=${currentPage}, size=${size})}">Supprimer</a></td>
+						<td th:text="${v.dateCreation}"></td>
+						<td th:if="${v.genre != null}" th:text="${v.genre.nomGen}"></td>
+						<td th:if="${v.genre == null}" th:text="'Pas de Genre'"></td>
+
+						
+						
+						<td sec:authorize="hasAuthority('ADMIN')"><a class="btn btn-success"
+						th:href="@{modifierVetement(id=${v.idVet} , page=${currentPage}, size=${size})}">Editer</a></td>
+						
+						<td sec:authorize="hasAuthority('ADMIN')"><a class="btn btn-danger" onclick="return confirm('Etes-vous sûr ?')" 
+							th:href="@{/deleteVetement(id=${v.idVet}, page=${currentPage}, size=${size})}">Supprimer</a></td>
 					</tr>
 				</table>
 				<ul class="nav nav-pills">

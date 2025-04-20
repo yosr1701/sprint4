@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.yosr.vetements.entities.Genre;
 import com.yosr.vetements.entities.Vetement;
+import com.yosr.vetements.repos.GenreRepository;
 import com.yosr.vetements.repos.VetementRepository;
 
 
@@ -17,6 +18,9 @@ public class VetementServiceImpl implements VetementService{
 	
 	@Autowired
 	VetementRepository vetementRepository;
+	
+	@Autowired
+	GenreRepository genreRepository;
 
 	@Override
 	public Vetement saveProduit(Vetement v) {
@@ -93,6 +97,12 @@ public class VetementServiceImpl implements VetementService{
 	public List<Vetement> trierVetementsNomVetPrix() {
 		
 		return vetementRepository.trierVetementsNomVetPrix();
+	}
+
+	@Override
+	public List<Genre> getAllGenres() {
+		
+		return genreRepository.findAll();
 	}
 
 }
