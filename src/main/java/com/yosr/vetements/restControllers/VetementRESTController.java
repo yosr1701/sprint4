@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yosr.vetements.dto.VetementDTO;
 import com.yosr.vetements.entities.Vetement;
 import com.yosr.vetements.service.VetementService;
 
@@ -24,27 +25,27 @@ public class VetementRESTController {
 	VetementService vetementService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public List<Vetement> getAllVetement()
+	public List<VetementDTO> getAllVetement()
 	{
 		return vetementService.getAllVetement();
 	}
 	
 	@RequestMapping(value="/{id}",method = RequestMethod.GET)
-	public Vetement getVetementById(@PathVariable("id") Long id)
+	public VetementDTO getVetementById(@PathVariable("id") Long id)
 	{
 		return vetementService.getVetement(id);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public Vetement createVetement(@RequestBody Vetement vetement) 
+	public VetementDTO createVetement(@RequestBody VetementDTO vetementDTO) 
 	{
-		return vetementService.saveProduit(vetement);
+		return vetementService.saveProduit(vetementDTO);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT)
-	public Vetement updateProduit(@RequestBody Vetement vetement)
+	public VetementDTO updateProduit(@RequestBody VetementDTO vetementDTO)
 	{
-		return vetementService.updateProduit(vetement);
+		return vetementService.updateProduit(vetementDTO);
 	}
 	
 	@RequestMapping(value="/{id}",method = RequestMethod.DELETE)

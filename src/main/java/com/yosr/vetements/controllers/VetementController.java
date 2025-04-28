@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.yosr.vetements.dto.VetementDTO;
 import com.yosr.vetements.entities.Genre;
 import com.yosr.vetements.entities.Vetement;
 import com.yosr.vetements.service.VetementService;
@@ -101,7 +102,7 @@ public class VetementController {
     public String editerProduit(@RequestParam("id") Long id, ModelMap modelMap,
     		@RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "2") int size) {
-        Vetement v = vetementService.getVetement(id);
+        VetementDTO v = vetementService.getVetement(id);
         List<Genre> gens = vetementService.getAllGenres();
         modelMap.addAttribute("vetement", v);
         modelMap.addAttribute("mode", "edit");
@@ -120,7 +121,7 @@ public class VetementController {
 		vetement.setDateCreation(dateCreation);
 
 		vetementService.updateProduit(vetement);
-		List<Vetement> vet = vetementService.getAllVetement();
+		List<VetementDTO> vet = vetementService.getAllVetement();
 		modelMap.addAttribute("Vetements", vet);
 		return "listeVetements";
 	}

@@ -5,17 +5,23 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 
+import com.yosr.vetements.dto.VetementDTO;
 import com.yosr.vetements.entities.Genre;
 import com.yosr.vetements.entities.Vetement;
 
 public interface VetementService {
 	
-	Vetement saveProduit(Vetement v);
-	Vetement updateProduit(Vetement v);
+	VetementDTO saveProduit(VetementDTO v);
+	VetementDTO updateProduit(VetementDTO  v);
+	
+	VetementDTO getVetement(Long id);
+	List<VetementDTO> getAllVetement();
+	
+	
 	void deleteProduit(Vetement v);
 	void deleteVetementById(Long id);
-	Vetement getVetement(Long id);
-	List<Vetement> getAllVetement();
+	
+	
 	List<Vetement> findByNomVet(String nom);
 	List<Vetement> findByNomVetContains(String nom);
 	List<Vetement> findByNomPrix(@Param("nom") String nom, @Param("prix") Double prix);
@@ -27,5 +33,8 @@ public interface VetementService {
 	List<Genre>getAllGenres();
 	
 	Page<Vetement> getAllVetementParPage(int page, int size);
+	
+	VetementDTO convertEntityToDto(Vetement v);
+	Vetement convertDtoToEntity (VetementDTO vetementDto);
 
 }

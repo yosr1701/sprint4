@@ -1,70 +1,96 @@
 package com.yosr.vetements.security;
 
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-	
-	
+
+
 	@Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception
 	{
-	 http.authorizeHttpRequests((requests)->requests
+		http.authorizeHttpRequests((requests)->requests
 
-	.requestMatchers("/showCreate","/saveProduit").hasAnyAuthority("ADMIN","AGENT")
+				.requestMatchers("/showCreate","/saveProduit").hasAnyAuthority("ADMIN","AGENT")
 
-	.requestMatchers("/modifierVetement","/deleteVetement").hasAuthority("ADMIN")
-	
-	.requestMatchers("/listeVetements").hasAnyAuthority("ADMIN","AGENT","USER")
-	.anyRequest().authenticated())
+				.requestMatchers("/modifierVetement","/deleteVetement").hasAuthority("ADMIN")
 
-	 .formLogin(Customizer.withDefaults())
-	 .httpBasic(Customizer.withDefaults())
-	 
-	 .exceptionHandling((exception)->
-	 exception.accessDeniedPage("/accessDenied"));
-	 
-	 
-	 return http.build();
+				.requestMatchers("/listeVetements").hasAnyAuthority("ADMIN","AGENT","USER")
+				//webjars contient les fichiers css bootstrap
+				.requestMatchers("/login","/webjars/**").permitAll()
+				.anyRequest().authenticated())
+
+		//.formLogin(Customizer.withDefaults())
+		.formLogin((formLogin) -> formLogin
+				 .loginPage("/login")
+				 .defaultSuccessUrl("/") )
+		
+		.httpBasic(Customizer.withDefaults())
+
+		.exceptionHandling((exception)->
+		exception.accessDeniedPage("/accessDenied"));
+
+
+		return http.build();
+	}
+
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder () {
+		return new BCryptPasswordEncoder();
 	}
 	
 	
-	 @Bean
-	 public PasswordEncoder passwordEncoder () {
-	 return new BCryptPasswordEncoder();
-	 }
-	//singelton une seule instance
+	/*
 	@Bean
+	public UserDetailsService userDetailsService(DataSource dataSource) {
+		JdbcUserDetailsManager jdbcUserDetailsManager =new
+				JdbcUserDetailsManager(dataSource);
+		// si les nom  de tab ne sont pas les mm dans la bdd
+		jdbcUserDetailsManager.setUsersByUsernameQuery("select username ,password, enabled from user where username =?");
+		jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("SELECT u.username, r.role as authority " +
+															"FROM user_role ur, user u , role r " +
+								"WHERE u.user_id = ur.user_id AND ur.role_id = r.role_id AND u.username = ?");
+
+				return jdbcUserDetailsManager; 
+	}*/
+
+	//singelton une seule instance
+/*	@Bean
 	public InMemoryUserDetailsManager userDetailsService() {
 		PasswordEncoder passwordEncoder = passwordEncoder ();
 
 		UserDetails admin = User
-			.withUsername("admin")
-			.password(passwordEncoder.encode("123"))
-			.authorities("ADMIN")
-			.build();
-		
+				.withUsername("admin")
+				.password(passwordEncoder.encode("123"))
+				.authorities("ADMIN")
+				.build();
+
 		UserDetails userYosr = User
-			.withUsername("yosr")
-			.password(passwordEncoder.encode("123"))
-			.authorities("AGENT", "USER")
-			.build();
-		
+				.withUsername("yosr")
+				.password(passwordEncoder.encode("123"))
+				.authorities("AGENT", "USER")
+				.build();
+
 		UserDetails user1 = User
-			.withUsername("naanaa")
-			.password(passwordEncoder.encode("123"))
-			.authorities("USER")
-			.build();
+				.withUsername("naanaa")
+				.password(passwordEncoder.encode("123"))
+				.authorities("USER")
+				.build();
 
 		return new InMemoryUserDetailsManager(admin, userYosr, user1);
-	}
+	}*/
 }
