@@ -1,96 +1,36 @@
 package com.yosr.vetements.security;
 
-import javax.sql.DataSource;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
 
+	 @Bean
+	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	        http
+	            .cors()  // Active le CORS
+	            .and()
+	            .csrf().disable() // Désactive CSRF pour permettre les appels Angular
+	            .authorizeHttpRequests(auth -> auth
+	                .requestMatchers("/vetements/api/**").permitAll() // Accessible sans login
+	                .requestMatchers("/webjars/**", "/error").permitAll() // Accessibles aussi
+	                .anyRequest().permitAll() // Permet toutes les autres requêtes
+	            )
+	            .formLogin().disable()  // Désactive le formulaire de connexion
+	            .httpBasic().disable(); // Désactive la connexion HTTP basique
 
-	@Bean
-	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception
-	{
-		http.authorizeHttpRequests((requests)->requests
+	        return http.build();
+	    }
 
-				.requestMatchers("/showCreate","/saveProduit").hasAnyAuthority("ADMIN","AGENT")
-
-				.requestMatchers("/modifierVetement","/deleteVetement").hasAuthority("ADMIN")
-
-				.requestMatchers("/listeVetements").hasAnyAuthority("ADMIN","AGENT","USER")
-				//webjars contient les fichiers css bootstrap
-				.requestMatchers("/login","/webjars/**").permitAll()
-				.anyRequest().authenticated())
-
-		//.formLogin(Customizer.withDefaults())
-		.formLogin((formLogin) -> formLogin
-				 .loginPage("/login")
-				 .defaultSuccessUrl("/") )
-		
-		.httpBasic(Customizer.withDefaults())
-
-		.exceptionHandling((exception)->
-		exception.accessDeniedPage("/accessDenied"));
-
-
-		return http.build();
-	}
-
-
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder () {
-		return new BCryptPasswordEncoder();
-	}
-	
-	
-	/*
-	@Bean
-	public UserDetailsService userDetailsService(DataSource dataSource) {
-		JdbcUserDetailsManager jdbcUserDetailsManager =new
-				JdbcUserDetailsManager(dataSource);
-		// si les nom  de tab ne sont pas les mm dans la bdd
-		jdbcUserDetailsManager.setUsersByUsernameQuery("select username ,password, enabled from user where username =?");
-		jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("SELECT u.username, r.role as authority " +
-															"FROM user_role ur, user u , role r " +
-								"WHERE u.user_id = ur.user_id AND ur.role_id = r.role_id AND u.username = ?");
-
-				return jdbcUserDetailsManager; 
-	}*/
-
-	//singelton une seule instance
-/*	@Bean
-	public InMemoryUserDetailsManager userDetailsService() {
-		PasswordEncoder passwordEncoder = passwordEncoder ();
-
-		UserDetails admin = User
-				.withUsername("admin")
-				.password(passwordEncoder.encode("123"))
-				.authorities("ADMIN")
-				.build();
-
-		UserDetails userYosr = User
-				.withUsername("yosr")
-				.password(passwordEncoder.encode("123"))
-				.authorities("AGENT", "USER")
-				.build();
-
-		UserDetails user1 = User
-				.withUsername("naanaa")
-				.password(passwordEncoder.encode("123"))
-				.authorities("USER")
-				.build();
-
-		return new InMemoryUserDetailsManager(admin, userYosr, user1);
-	}*/
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
